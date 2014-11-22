@@ -24,8 +24,8 @@ Redmine::Plugin.register :redmine_etherpad do
   Redmine::WikiFormatting::Macros.register do
     desc "Embed etherpad"
     macro :etherpad do |obj, args|
-      conf = Redmine::Configuration['etherpad']
-      unless (conf and conf['host']) || ENV["ETHERPAD_HOST"]
+      conf = Redmine::Configuration['etherpad'] || {}
+      unless conf['host'] || ENV["ETHERPAD_HOST"]
         raise "Please define etherpad parameters in configuration.yml."
       end
 
