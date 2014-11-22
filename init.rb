@@ -25,7 +25,7 @@ Redmine::Plugin.register :redmine_etherpad do
     desc "Embed etherpad"
     macro :etherpad do |obj, args|
       conf = Redmine::Configuration['etherpad']
-      unless conf and conf['host'] 
+      unless (conf and conf['host']) || ENV["ETHERPAD_HOST"]
         raise "Please define etherpad parameters in configuration.yml."
       end
 
@@ -61,7 +61,7 @@ Redmine::Plugin.register :redmine_etherpad do
       width = controls.delete('width')
       height = controls.delete('height')
       
-      return CGI::unescapeHTML("<iframe src='#{conf['host']}/p/#{URI.encode(padname)}?#{hash_to_querystring(controls)}' width='#{width}' height='#{height}'></iframe>").html_safe
+      return CGI::unescapeHTML("<iframe src='#{ENV["ETHERPAD_HOST"] || conf['host']}/p/#{URI.encode(padname)}?#{hash_to_querystring(controls)}' width='#{width}' height='#{height}'></iframe>").html_safe
     end
   end
 end
